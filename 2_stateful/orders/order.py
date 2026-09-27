@@ -36,7 +36,9 @@ class Order:
         self._update_total_cache()
     
     def update_li_quantity(self, line_item: LineItem, quantity: int) -> None:
+        # self._total_cache -= line_item.quantity
         line_item.quantity = quantity
+        # self._total_cache += line_item.quantity
         self._update_total_cache()
         
     

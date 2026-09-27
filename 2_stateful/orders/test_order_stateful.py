@@ -6,6 +6,7 @@ from hypothesis.stateful import RuleBasedStateMachine
 from hypothesis.stateful import precondition
 from hypothesis.stateful import rule
 from hypothesis.stateful import invariant
+from hypothesis import assume
 
 from order import LineItem
 from order import Order
@@ -42,8 +43,12 @@ class OrderTest(RuleBasedStateMachine):
     @precondition(lambda self: len(self.order.line_items) > 0)
     @rule(data=st.data(), quantity=st.integers())
     def update_line_item_quantity(self, data: st.SearchStrategy, quantity: int) -> None:
+        total_before = self.order.total
         line_item = data.draw(st.sampled_from(self.order.line_items))
+        assume(line_item.quantity != quantity)
+        assume(line_item.price != 0)
         self.order.update_li_quantity(line_item, quantity)
+        assert self.order.total != total_before
 
     @invariant()
     def total_agrees(self) -> None:
