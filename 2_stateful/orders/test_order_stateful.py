@@ -61,4 +61,3 @@ class OrderTest(RuleBasedStateMachine):
         assert self.order.total == 0
     
 OrderTestCase: unittest.TestCase = OrderTest.TestCase
-
